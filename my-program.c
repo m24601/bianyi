@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<string.h>
-char buffer[200000];
+char buffer[10000];
 int intbuffer;
 FILE *file;
 int check(char buf[],int num,char keyword[])
@@ -23,31 +23,32 @@ int isLetter(char letter)
 int main(int argc,char * argv[])
 {
 	file=fopen(argv[1],"r");
-	char input[200000];
-	fgets(input,200000,file);
-	input[strlen(input)-1]='\0';
-	for(int i=0;i<strlen(input);i++)
+	char input[10000];
+	while(fgets(input,10000,file)!=NULL)
 	{
-		if(input[i]=='+')
-			printf("Plus\r\n");
+			for(int i=0;i<strlen(input);i++)
+	{
+		if(input[i]==' '||input[i]=='\n'||(input[i]=='\r'&&input[i]=='\n')){}
+		else if(input[i]=='+')
+			fprintf(stdout,"Plus\r\n");
 		else if(input[i]=='*')
-			printf("Star\r\n");
+			fprintf(stdout,"Star\r\n");
 		else if(input[i]==',')
-			printf("Comma\r\n");
+			fprintf(stdout,"Comma\r\n");
 		else if(input[i]=='(')
-			printf("LParenthesis\r\n");
+			fprintf(stdout,"LParenthesis\r\n");
 		else if(input[i]==')')
-			printf("RParenthesis\r\n");
+			fprintf(stdout,"RParenthesis\r\n");
 		else if(input[i]==':')
 		{
 			if(i+1<strlen(input)&&input[i+1]=='=')
 			{
 				i++;
-				printf("Assign\r\n");
+				fprintf(stdout,"Assign\r\n");
 			}
 			else
 			{
-				printf("Colon\r\n");
+				fprintf(stdout,"Colon\r\n");
 			}
 		}
 		else if('0'<=input[i]&&input[i]<='9')
@@ -65,7 +66,7 @@ int main(int argc,char * argv[])
 					break;
 			}
 			i=j-1;
-			printf("Int(%d)\r\n",intbuffer);
+			fprintf(stdout,"Int(%d)\r\n",intbuffer);
 		}
 		else if('a'<=input[i]&&input[i]<='z'||'A'<=input[i]&&input[i]<='Z')
 		{
@@ -78,37 +79,37 @@ int main(int argc,char * argv[])
 					buffer[++top]=input[j];
 					if(check(buffer,top,"BEGIN\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("Begin\r\n");
+						fprintf(stdout,"Begin\r\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"END\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("End\r\n");
+						fprintf(stdout,"End\r\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"FOR\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("For\r\n");
+						fprintf(stdout,"For\r\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"IF\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("If\r\n");
+						fprintf(stdout,"If\r\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"THEN\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("Then\r\n");
+						fprintf(stdout,"Then\r\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"ELSE\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						printf("Else\r\n");
+						fprintf(stdout,"Else\r\n");
 						top=-1;
 						break;
 					}
@@ -121,7 +122,7 @@ int main(int argc,char * argv[])
 			}
 			if(top!=-1)
 			{
-				printf("Ident(%s)\r\n",buffer);
+				fprintf(stdout,"Ident(%s)\r\n",buffer);
 				i=j-1;
 			}
 			else
@@ -129,8 +130,9 @@ int main(int argc,char * argv[])
 		}
 		else
 		{
-			printf("Unknown\r\n");
+			fprintf(stdout,"Unknown\r\n");
 			return 0;
 		}
+	}
 	}
 }
