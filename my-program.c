@@ -30,25 +30,25 @@ int main(int argc,char * argv[])
 	{
 		if(input[i]==' '||input[i]=='\n'||(input[i]=='\r'&&input[i]=='\n')){}
 		else if(input[i]=='+')
-			fprintf(stdout,"Plus\r\n");
+			fprintf(stdout,"Plus\n");
 		else if(input[i]=='*')
-			fprintf(stdout,"Star\r\n");
+			fprintf(stdout,"Star\n");
 		else if(input[i]==',')
-			fprintf(stdout,"Comma\r\n");
+			fprintf(stdout,"Comma\n");
 		else if(input[i]=='(')
-			fprintf(stdout,"LParenthesis\r\n");
+			fprintf(stdout,"LParenthesis\n");
 		else if(input[i]==')')
-			fprintf(stdout,"RParenthesis\r\n");
+			fprintf(stdout,"RParenthesis\n");
 		else if(input[i]==':')
 		{
 			if(i+1<strlen(input)&&input[i+1]=='=')
 			{
 				i++;
-				fprintf(stdout,"Assign\r\n");
+				fprintf(stdout,"Assign\n");
 			}
 			else
 			{
-				fprintf(stdout,"Colon\r\n");
+				fprintf(stdout,"Colon\n");
 			}
 		}
 		else if('0'<=input[i]&&input[i]<='9')
@@ -66,7 +66,7 @@ int main(int argc,char * argv[])
 					break;
 			}
 			i=j-1;
-			fprintf(stdout,"Int(%d)\r\n",intbuffer);
+			fprintf(stdout,"Int(%d)\n",intbuffer);
 		}
 		else if('a'<=input[i]&&input[i]<='z'||'A'<=input[i]&&input[i]<='Z')
 		{
@@ -79,37 +79,37 @@ int main(int argc,char * argv[])
 					buffer[++top]=input[j];
 					if(check(buffer,top,"BEGIN\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"Begin\r\n");
+						fprintf(stdout,"Begin\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"END\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"End\r\n");
+						fprintf(stdout,"End\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"FOR\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"For\r\n");
+						fprintf(stdout,"For\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"IF\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"If\r\n");
+						fprintf(stdout,"If\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"THEN\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"Then\r\n");
+						fprintf(stdout,"Then\n");
 						top=-1;
 						break;
 					}
 					if(check(buffer,top,"ELSE\0")&&(j+1>=strlen(input)||!isLetter(input[j+1])))
 					{
-						fprintf(stdout,"Else\r\n");
+						fprintf(stdout,"Else\n");
 						top=-1;
 						break;
 					}
@@ -122,7 +122,7 @@ int main(int argc,char * argv[])
 			}
 			if(top!=-1)
 			{
-				fprintf(stdout,"Ident(%s)\r\n",buffer);
+				fprintf(stdout,"Ident(%s)\n",buffer);
 				i=j-1;
 			}
 			else
@@ -130,9 +130,11 @@ int main(int argc,char * argv[])
 		}
 		else
 		{
-			fprintf(stdout,"Unknown\r\n");
+			fprintf(stdout,"Unknown\n");
 			return 0;
 		}
 	}
 	}
+	fflush(stdout); 
+}
 }
