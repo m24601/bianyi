@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<string.h>
-char buffer[10000];
+char buffer[100000];
 int intbuffer;
 FILE *file;
 int check(char buf[],int num,char keyword[])
@@ -23,9 +23,8 @@ int isLetter(char letter)
 int main(int argc,char * argv[])
 {
 	file=fopen(argv[1],"r");
-	char input[10000];
-	fgets(input,10000,file);
-	input[strlen(input)-1]=0;
+	char input[100000];
+	fgets(input,100000,file);
 	for(int i=0;i<strlen(input);i++)
 	{
 		if(input[i]=='+')
