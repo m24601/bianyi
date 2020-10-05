@@ -25,6 +25,7 @@ int main(int argc,char * argv[])
 	file=fopen(argv[1],"r");
 	char input[100000];
 	fgets(input,100000,file);
+	input[strlen(input)-1]='\0';
 	for(int i=0;i<strlen(input);i++)
 	{
 		if(input[i]=='+')
