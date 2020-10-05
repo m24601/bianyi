@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 WORKDIR /app/
 COPY ./* ./
 RUN gcc my-program.c -o program
