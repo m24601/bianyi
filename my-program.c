@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<string.h>
-char input[100000],buffer[100000];
+char input[400000],buffer[400000];
 char input_letter[]={'+','*',',','(',')'};
 char *output_letter[]={"Plus\0","Star\0","Comma\0","Lparenthesis\0","RParenthesis\0"};
 char *sp_input[]={"BEGIN\0","END\0","FOR\0","IF\0","THEN\0","ELSE\0"};
@@ -22,9 +22,9 @@ int isLetter(char letter)
 }
 int main(int argc,char *argv[])
 {
-	FILE *file=fopen(argv[1],"r");
-	int num=fread(input,sizeof(char),100000,file);
-	for(int i=num;i<100000;i++)
+	FILE *file=fopen("input.txt","r");
+	int num=fread(input,sizeof(char),400000,file);
+	for(int i=num;i<400000;i++)
 		input[i]='\0';
 	for(int i=0;i<strlen(input);i++)
 	{
@@ -40,7 +40,7 @@ int main(int argc,char *argv[])
 		}
 		if(check)
 			continue;
-		if(input[i]==' '||input[i]=='\n'||(input[i]=='\r'&&input[i]=='\n')){continue;}
+		if(input[i]==' '||input[i]=='\n'||(input[i]=='\r'&&input[i+1]=='\n')){continue;}
 		else if(input[i]==':')
 		{
 			if(i+1<strlen(input)&&input[i+1]=='=')
@@ -85,7 +85,7 @@ int main(int argc,char *argv[])
 			{
 				printf("Ident(%s)\n",buffer);
 			}
-			for(int i=0;i<100000;i++)
+			for(int i=0;i<400000;i++)
 			{
 				buffer[i]=0;
 			}
