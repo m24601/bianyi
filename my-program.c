@@ -22,9 +22,9 @@ int isLetter(char letter)
 }
 int main(int argc,char *argv[])
 {
-	FILE *file=fopen("input.txt","r");
-	int num=fread(input,sizeof(char),10000,file);
-	for(int i=num;i<10000;i++)
+	FILE *file=fopen(argv[1],"r");
+	int num=fread(input,sizeof(char),9000,file);
+	for(int i=num;i<9000;i++)
 		input[i]='\0';
 	for(int i=0;i<num;i++)
 	{
@@ -66,11 +66,13 @@ int main(int argc,char *argv[])
 		}
 		else if(('a'<=input[i]&&input[i]<='z')||('A'<=input[i]&&input[i]<='Z'))
 		{
-			int top=-1;
+			int top=-1,max=0;
 			buffer[++top]=input[i];
+			max=top;
 			while(isLetter(input[i+1]))
 			{
 				buffer[++top]=input[++i];
+				max=top;
 				for(int j=0;j<6;j++)
 				{
 					if(token_equals(buffer,sp_input[j])&&(i+1>=strlen(input)||!isLetter(input[i+1])))
@@ -85,7 +87,7 @@ int main(int argc,char *argv[])
 			{
 				printf("Ident(%s)\n",buffer);
 			}
-			for(int i=0;i<10000;i++)
+			for(int i=0;i<=max;i++)
 			{
 				buffer[i]=0;
 			}
