@@ -26,7 +26,7 @@ int main(int argc,char *argv[])
 	int num=fread(input,sizeof(char),400000,file);
 	for(int i=num;i<400000;i++)
 		input[i]='\0';
-	for(int i=0;i<strlen(input);i++)
+	for(int i=0;i<num;i++)
 	{
 		int check=0;
 		for(int j=0;j<5;j++)
