@@ -2,7 +2,7 @@
 #include<string.h>
 char input[100000],buffer[100000];
 char input_letter[]={'+','*',',','(',')'};
-char *output_letter[]={"Plus\0","Star\0","Comma\0","Lparenthesis\0","RParenthesis\0"};
+char *output_letter[]={"Plus\0","Star\0","Comma\0","LParenthesis\0","RParenthesis\0"};
 char *sp_input[]={"BEGIN\0","END\0","FOR\0","IF\0","THEN\0","ELSE\0"};
 char *sp_output[]={"Begin\0","End\0","For\0","If\0","Then\0","Else\0"};
 int token_equals(char *token1,char *token2)
