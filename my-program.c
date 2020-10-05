@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<string.h>
-char input[400000],buffer[400000];
+char input[10000],buffer[10000];
 char input_letter[]={'+','*',',','(',')'};
 char *output_letter[]={"Plus\0","Star\0","Comma\0","Lparenthesis\0","RParenthesis\0"};
 char *sp_input[]={"BEGIN\0","END\0","FOR\0","IF\0","THEN\0","ELSE\0"};
@@ -23,8 +23,8 @@ int isLetter(char letter)
 int main(int argc,char *argv[])
 {
 	FILE *file=fopen("input.txt","r");
-	int num=fread(input,sizeof(char),400000,file);
-	for(int i=num;i<400000;i++)
+	int num=fread(input,sizeof(char),10000,file);
+	for(int i=num;i<10000;i++)
 		input[i]='\0';
 	for(int i=0;i<num;i++)
 	{
@@ -85,7 +85,7 @@ int main(int argc,char *argv[])
 			{
 				printf("Ident(%s)\n",buffer);
 			}
-			for(int i=0;i<400000;i++)
+			for(int i=0;i<10000;i++)
 			{
 				buffer[i]=0;
 			}
