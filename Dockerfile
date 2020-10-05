@@ -1,5 +1,4 @@
-FROM ubuntu:16.04
-RUN apt update && apt install gcc
+FROM gcc:10
 WORKDIR /app/
 COPY ./* ./
 RUN gcc my-program.c -o program
