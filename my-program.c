@@ -38,20 +38,23 @@ int merge()
 			for(int j=i-1;j+2<=tops;j++){
 				stack[j]=stack[j+2];
 			}
-			tops-=2;
+			stack[tops--]='\0';
+			stack[tops--]='\0';
 			return 1;
 		}else if(i>=2&&stack[i]=='N'&&stack[i-1]=='*'&&stack[i-2]=='N'){
 			for(int j=i-1;j+2<=tops;j++){
 				stack[j]=stack[j+2];
 			}
-			tops-=2;
+			stack[tops--]='\0';
+			stack[tops--]='\0';
 			return 1;
 		}else if(i>=2&&stack[i]==')'&&stack[i-1]=='N'&&stack[i-2]=='('){
 			for(int j=i-1;j+2<=tops;j++){
 				stack[j]=stack[j+2];
 			}
-			tops-=2;
-			stack[i]='N';
+			stack[tops--]='\0';
+			stack[tops--]='\0';
+			stack[i-2]='N';
 			return 1;
 		}
 	}
