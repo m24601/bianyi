@@ -24,7 +24,7 @@ int merge()
 		stack1[tops1--]='\0';
 		tops2++;
 		return 1;
-	}else if((stack1[tops1]=='*'||stack1[tops1]=='+')&&tops2>=0){
+	}else if((stack1[tops1]=='*'||stack1[tops1]=='+')&&tops2>0){
 		stack1[tops1--]='\0';
 		tops2--;
 		return 1;
