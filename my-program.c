@@ -1,99 +1,93 @@
 #include<stdio.h>
-#include<string.h>
-char input[100000],buffer[100000];
-char input_letter[]={'+','*',',','(',')'};
-char *output_letter[]={"Plus\0","Star\0","Comma\0","LParenthesis\0","RParenthesis\0"};
-char *sp_input[]={"BEGIN\0","END\0","FOR\0","IF\0","THEN\0","ELSE\0"};
-char *sp_output[]={"Begin\0","End\0","For\0","If\0","Then\0","Else\0"};
-int token_equals(char *token1,char *token2)
+char token[5]={'+','*','(',')','i'};
+int priority[6][6]={
+    {1,-1,-1,1,-1},
+    {1,1,-1,1,-1},
+    {-1,-1,-1,0,-1},
+    {1,1,-2,1,-2},
+    {1,1,-2,1,-2},
+};
+char stack[1005],input[1005];
+int m,tops=-1;
+int GetIndex(char c)
 {
-	if(strlen(token1)!=strlen(token2))
-		return 0;
-	for (int i=0;i<strlen(token1);i++)
+    for(int i=0;i<5;i++)
+    {
+        if(token[i]==c)
+            return i;
+    }
+    return -1;
+}
+int GetFirstTokenIndex()
+{
+	for(int i=tops;i>=0;i--)
 	{
-		if(token1[i]!=token2[i])
-			return 0;
+		if(GetIndex(stack[i])!=-1)
+			return GetIndex(stack[i]);
 	}
-	return 1;
+	return -1;
 }
-int isLetter(char letter)
+int merge()
 {
-	return ('a'<=letter&&letter<='z')||('A'<=letter&&letter<='Z')||('0'<=letter&&letter<='9');
+	if(stack[tops]=='i'){
+		stack[tops]='N';
+		return 1;
+	}else if(tops>=2&&stack[tops]=='N'&&stack[tops-1]=='+'&&stack[tops-2]=='N'){
+		stack[tops--]='\0';
+		stack[tops--]='\0';
+		return 1;
+	}else if(tops>=2&&stack[tops]=='N'&&stack[tops-1]=='*'&&stack[tops-2]=='N'){
+		stack[tops--]='\0';
+		stack[tops--]='\0';
+		return 1;
+	}else if(tops>=2&&stack[tops]==')'&&stack[tops-1]=='N'&&stack[tops-2]=='('){
+		stack[tops--]='\0';
+		stack[tops--]='\0';
+		stack[tops]='N';
+		return 1;
+	}
+	return 0;
 }
-int main(int argc,char *argv[])
+int main(int argc,char*argv[])
 {
-	FILE *file=fopen(argv[1],"r");
-	int num=fread(input,sizeof(char),100000,file);
-	for(int i=num;i<100000;i++)
-		input[i]='\0';
-	for(int i=0;i<num;i++)
-	{
-		int check=0;
-		for(int j=0;j<5;j++)
-		{
-			if(input[i]==input_letter[j])
-			{
-				printf("%s\n",output_letter[j]);
-				check=1;
-				break;
-			}
-		}
-		if(check)
-			continue;
-		if(input[i]==' '||input[i]=='\n'||(input[i]=='\r'&&input[i+1]=='\n')){continue;}
-		else if(input[i]==':')
-		{
-			if(i+1<strlen(input)&&input[i+1]=='=')
-			{
-				printf("Assign\n");
-				i++;
-			}
-			else
-				printf("Colon\n");
-			continue;
-		}
-		else if('0'<=input[i]&&input[i]<='9')
-		{
-			int num=input[i]-'0';
-			while('0'<=input[i+1]&&input[i+1]<='9')
-			{
-				i++;
-				num*=10;
-				num+=input[i]-'0';
-			}
-			printf("Int(%d)\n",num);
-			continue;
-		}
-		else if(('a'<=input[i]&&input[i]<='z')||('A'<=input[i]&&input[i]<='Z'))
-		{
-			int top=-1;
-			buffer[++top]=input[i];
-			while(isLetter(input[i+1]))
-			{
-				buffer[++top]=input[++i];
-				for(int j=0;j<6;j++)
-				{
-					if(token_equals(buffer,sp_input[j])&&(i+1>=strlen(input)||!isLetter(input[i+1])))
-					{
-						printf("%s\n",sp_output[j]);
-						top=-1;
-						break;
-					}
+    FILE *file=fopen(argv[1],"r");
+    int num=fread(input,sizeof(char),1000,file);
+    if(input[num-1]=='\n')num--;
+    if(input[num-1]=='\r')num--;
+    for(int i=0;i<num;i++)
+    {
+    	m=GetIndex(input[i]);
+    	if(m==-1){
+    		printf("E\n");
+    		return 0;
+		}else if(GetFirstTokenIndex()==-1){
+			stack[++tops]=input[i];
+			printf("I%c\n",input[i]);
+		}else if(priority[GetFirstTokenIndex()][m]==-2){
+			printf("E\n");
+    		return 0;
+		}else if(priority[GetFirstTokenIndex()][m]<=0){
+			stack[++tops]=input[i];
+			printf("I%c\n",input[i]);
+		}else if(priority[GetFirstTokenIndex()][m]==1){
+			while(GetFirstTokenIndex()!=-1&&priority[GetFirstTokenIndex()][m]==1){
+				if(!merge()){
+					printf("RE\n");
+					return 0;
 				}
+				printf("R\n");
 			}
-			if(top!=-1)
-			{
-				printf("Ident(%s)\n",buffer);
-			}
-			for(int i=0;i<=100000;i++)
-			{
-				buffer[i]=0;
-			}
-		}
-		else
-		{
-			printf("Unknown\n");
-			return 0;
+			stack[++tops]=input[i];
+			printf("I%c\n",input[i]);
 		}
 	}
+	while(GetFirstTokenIndex()!=-1){
+		if(!merge()){
+			printf("RE\n");
+			return 0;
+		}
+		printf("R\n");
+	}
+	if(tops!=0)
+		printf("RE\n");
 }
