@@ -7,8 +7,8 @@ int priority[6][6]={
     {1,1,-2,1,-2},
     {1,1,-2,1,-2},
 };
-char stack[1005],input[1005];
-int m,tops=-1;
+char stack1[1005],input[1005];
+int m,tops1=-1,tops2=-1;
 int GetIndex(char c)
 {
     for(int i=0;i<5;i++)
@@ -18,45 +18,20 @@ int GetIndex(char c)
     }
     return -1;
 }
-int GetFirstTokenIndex()
-{
-	for(int i=tops;i>=0;i--)
-	{
-		if(GetIndex(stack[i])!=-1)
-			return GetIndex(stack[i]);
-	}
-	return -1;
-}
 int merge()
 {
-	for(int i=tops;i>=0;i--)
-	{
-		if(stack[i]=='i'){
-			stack[i]='N';
-			return 1;
-		}else if(i>=2&&stack[i]=='N'&&stack[i-1]=='+'&&stack[i-2]=='N'){
-			for(int j=i-1;j+2<=tops;j++){
-				stack[j]=stack[j+2];
-			}
-			stack[tops--]='\0';
-			stack[tops--]='\0';
-			return 1;
-		}else if(i>=2&&stack[i]=='N'&&stack[i-1]=='*'&&stack[i-2]=='N'){
-			for(int j=i-1;j+2<=tops;j++){
-				stack[j]=stack[j+2];
-			}
-			stack[tops--]='\0';
-			stack[tops--]='\0';
-			return 1;
-		}else if(i>=2&&stack[i]==')'&&stack[i-1]=='N'&&stack[i-2]=='('){
-			for(int j=i-1;j+2<=tops;j++){
-				stack[j]=stack[j+2];
-			}
-			stack[tops--]='\0';
-			stack[tops--]='\0';
-			stack[i-2]='N';
-			return 1;
-		}
+	if(stack1[tops1]=='i'){
+		stack1[tops1--]='\0';
+		tops2++;
+		return 1;
+	}else if((stack1[tops1]=='*'||stack1[tops1]=='+')&&tops2>=0){
+		stack1[tops1--]='\0';
+		tops2--;
+		return 1;
+	}else if(tops1>0&&(stack1[tops1]==')'||stack1[tops1-1]=='(')&&tops2>=0){
+		stack1[tops1--]='\0';
+		stack1[tops1--]='\0';
+		return 1;
 	}
 	return 0;
 }
@@ -72,34 +47,39 @@ int main(int argc,char*argv[])
     	if(m==-1){
     		printf("E\n");
     		return 0;
-		}else if(GetFirstTokenIndex()==-1){
-			stack[++tops]=input[i];
+		}else if(tops1==-1){
+			stack1[++tops1]=input[i];
 			printf("I%c\n",input[i]);
-		}else if(priority[GetFirstTokenIndex()][m]==-2){
+		}else if(priority[GetIndex(stack1[tops1])][m]==-2){
 			printf("E\n");
     		return 0;
-		}else if(priority[GetFirstTokenIndex()][m]<=0){
-			stack[++tops]=input[i];
+		}else if(priority[GetIndex(stack1[tops1])][m]<=0){
+			stack1[++tops1]=input[i];
 			printf("I%c\n",input[i]);
-		}else if(priority[GetFirstTokenIndex()][m]==1){
-			while(GetFirstTokenIndex()!=-1&&priority[GetFirstTokenIndex()][m]==1){
+		}else if(priority[GetIndex(stack1[tops1])][m]==1){
+			while(tops1!=-1&&priority[GetIndex(stack1[tops1])][m]==1){
 				if(!merge()){
 					printf("RE\n");
 					return 0;
 				}
 				printf("R\n");
 			}
-			stack[++tops]=input[i];
+			stack1[++tops1]=input[i];
 			printf("I%c\n",input[i]);
 		}
 	}
-	while(GetFirstTokenIndex()!=-1){
+	while(tops1!=-1){
 		if(!merge()){
 			printf("RE\n");
 			return 0;
 		}
-		printf("R\n");
+		if(tops2>=0)
+			printf("R\n");
+		else{
+			printf("RE\n");
+			return 0;
+		}
 	}
-	if(tops!=0)
+	if(tops2!=0)
 		printf("RE\n");
 }
