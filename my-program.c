@@ -29,22 +29,25 @@ int GetFirstTokenIndex()
 }
 int merge()
 {
-	if(stack[tops]=='i'){
-		stack[tops]='N';
-		return 1;
-	}else if(tops>=2&&stack[tops]=='N'&&stack[tops-1]=='+'&&stack[tops-2]=='N'){
-		stack[tops--]='\0';
-		stack[tops--]='\0';
-		return 1;
-	}else if(tops>=2&&stack[tops]=='N'&&stack[tops-1]=='*'&&stack[tops-2]=='N'){
-		stack[tops--]='\0';
-		stack[tops--]='\0';
-		return 1;
-	}else if(tops>=2&&stack[tops]==')'&&stack[tops-1]=='N'&&stack[tops-2]=='('){
-		stack[tops--]='\0';
-		stack[tops--]='\0';
-		stack[tops]='N';
-		return 1;
+	for(int i=tops;i>=0;i--)
+	{
+		if(stack[i]=='i'){
+			stack[i]='N';
+			return 1;
+		}else if(i>=2&&stack[i]=='N'&&stack[i-1]=='+'&&stack[i-2]=='N'){
+			stack[i--]='\0';
+			stack[i--]='\0';
+			return 1;
+		}else if(i>=2&&stack[i]=='N'&&stack[i-1]=='*'&&stack[i-2]=='N'){
+			stack[i--]='\0';
+			stack[i--]='\0';
+			return 1;
+		}else if(i>=2&&stack[i]==')'&&stack[i-1]=='N'&&stack[i-2]=='('){
+			stack[i--]='\0';
+			stack[i--]='\0';
+			stack[i]='N';
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -52,7 +55,6 @@ int main(int argc,char*argv[])
 {
     FILE *file=fopen(argv[1],"r");
     int num=fread(input,sizeof(char),1000,file);
-    printf("%s\n",input);
     if(input[num-1]=='\n')num--;
     if(input[num-1]=='\r')num--;
     for(int i=0;i<num;i++)
