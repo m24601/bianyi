@@ -52,6 +52,7 @@ int main(int argc,char*argv[])
 {
     FILE *file=fopen(argv[1],"r");
     int num=fread(input,sizeof(char),1000,file);
+    printf("%s\n",input);
     if(input[num-1]=='\n')num--;
     if(input[num-1]=='\r')num--;
     for(int i=0;i<num;i++)
